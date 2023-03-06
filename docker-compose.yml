@@ -1,31 +1,41 @@
 version: '3'
 
 services:
-  py_env_1:
+  dev:
     build: 
-      context: .
+      context: /development
       dockerfile: Dockerfile
-    image: ubuntu_py_aws
+    image: boto3_dev
     environment:
       ENVIRONMENT: dev
     volumes:
-      - ./Lambda_EC2:/Scripts
+      - ./development/scripts
+    networks:
+      - boto3_dev_net
 
-  py_env_2:
+  prodA:
     build: 
-      context: .
+      context: /productionA
       dockerfile: Dockerfile
-    image: ubuntu_py_aws
+    image: boto3_prodA
     environment:
       ENVIRONMENT: prod
+    networks:
+      - boto3_prod_net
 
-  py_env_3:
+  prodB:
     build: 
-      context: .
+      context: /productionB
       dockerfile: Dockerfile
-    image: ubuntu_py_aws
+    image: boto3_prodB
     environment:
       ENVIRONMENT: prod
+    networks:
+      - boto3_prod_net
+
+networks:
+  boto3_prod_net:
+  boto3_dev_net:
 
       
 

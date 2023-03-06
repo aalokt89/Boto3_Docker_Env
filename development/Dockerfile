@@ -1,8 +1,9 @@
-FROM python:3.9.16-alpine3.17
+FROM alpine
 
 #update, install curl, zip/unzip
 RUN apk update \
-    && apk add curl zip unzip git
+    && apk add bash \
+    && apk add curl zip git unzip iputils
 
 #install aws cli
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
@@ -10,11 +11,15 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2
     && ./aws/install -i /usr/local/aws-cli -b /usr/local/bin
 
 #install python/boto3
-RUN pip install boto3 \
-    && rm awscliv2.zip 
+RUN apk add python3 py3-pip \
+    && rm awscliv2.zip
 
-WORKDIR /home
+COPY /development/requirmments.txt /home/app
 
-RUN git clone https://github.com/aalokt89/content-lambda-boto3.git
+WORKDIR /home/app/
+
+RUN pip install requirements.txt
+
+COPY /development .
 
 CMD ["tail", "-f", "/dev/null"]
