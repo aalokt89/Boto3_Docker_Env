@@ -3,39 +3,42 @@ version: '3'
 services:
   dev:
     build: 
-      context: /development
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./development/Dockerfile
     image: boto3_dev
     environment:
       ENVIRONMENT: dev
     volumes:
-      - ./development/scripts
+      - type: bind
+        source: ./development
+        target: /home/app
     networks:
-      - boto3_dev_net
+      - dev_net
 
   prodA:
-    build: 
-      context: /productionA
-      dockerfile: Dockerfile
-    image: boto3_prodA
+    build:
+      context: .
+      dockerfile: ./productionA/Dockerfile
+    image: boto3_prod_a
     environment:
       ENVIRONMENT: prod
     networks:
-      - boto3_prod_net
+      - prod_net
 
   prodB:
     build: 
-      context: /productionB
-      dockerfile: Dockerfile
-    image: boto3_prodB
+      context: .
+      dockerfile: ./productionB/Dockerfile
+    image: boto3_prod_b
     environment:
       ENVIRONMENT: prod
     networks:
-      - boto3_prod_net
+      - prod_net
 
 networks:
-  boto3_prod_net:
-  boto3_dev_net:
+  prod_net:
+  dev_net:
+   
 
       
 
